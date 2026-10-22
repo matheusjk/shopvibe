@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  api:
+    image: fia_fastapi
+    build:
+      context: .      
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"   
+    container_name:  fast-api-fia 
+    volumes:
+      - .:/home/app/api   
+    environment:
+      - DATABASE_URL=mongodb://localhost:27017
+    stdin_open: true
+    tty: true 
+
+
+
