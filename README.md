@@ -24,7 +24,7 @@ Decidimos usar o Kafka conect debezium por necessidade de baixissima latencia, a
 
 ---
 
-![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23 19-21-38.png)
+![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23-19-21-38.png)
 
 ---
 
@@ -48,7 +48,7 @@ Impacto negativo: Necessita grana e gente capacitada para dar manutenção nos t
 
 ---
 
-![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23 19-00-28.png)
+![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23-19-00-28.png)
 
 ---
 
@@ -65,6 +65,6 @@ Impacto negativo: Necessita grana e gente capacitada para dar manutenção nos t
 
 ---
 
-![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23 18-58-49.png)
+![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23-18-58-49.png)
 
 ---
