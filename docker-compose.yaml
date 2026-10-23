@@ -364,14 +364,15 @@ services:
     ports:
       - "9092:9092"
     environment:
-      # Define 10 partições como padrão para novos tópicos
-      KAFKA_NUM_PARTITIONS: 10
       KAFKA_BROKER_ID: 101
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-broker:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      # Configuração para que tópicos criados automaticamente tenham 5 partições
+      KAFKA_NUM_PARTITIONS: 5
     networks:
       - dados
 
@@ -570,6 +571,7 @@ services:
             "topic.prefix": "pgserver",
             "key.converter": "org.apache.kafka.connect.storage.StringConverter",
             "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+            "decimal.handling.mode": "string",
             "transforms": "unwrap",
             "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
             "transforms.unwrap.drop.tombstones": "false",
@@ -621,8 +623,13 @@ services:
             "key.converter": "org.apache.kafka.connect.storage.StringConverter",
             "value.converter": "org.apache.kafka.connect.json.JsonConverter",
             "value.converter.schemas.enable": "false",
+            "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.ReplaceOneDefaultStrategy",
+            "max.batch.size": "0",
+            "delete.on.null.values": "false",
+            "errors.tolerance": "all",
+            "errors.max.errors": "-1",
+            "errors.log.enable": "true",
             "schema.compatibility": "NONE",
-            "decimal.format": "numeric",
             "value.converter.schema.registry.url": "http://schema-registry:8081"
           }
         }'

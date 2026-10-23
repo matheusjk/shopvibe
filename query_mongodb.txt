@@ -1,0 +1,110 @@
+[  {
+    $addFields: {
+      "parsed_total": { $toDouble: "$after.total" },
+      "parsed_date": { $toDate: "$after.created_at" }
+    }
+  },
+  {
+    $match: {
+      "parsed_total": { $gte: 50 },
+      "after": { $ne: null }
+    }
+  },
+
+  {
+    $group: {
+      _id: {
+        year: { $year: "$parsed_date" },
+        status: "$after.status"
+      },
+      count: { $sum: 1 },
+      total_sales: { $sum: "$parsed_total" }
+    }
+  },
+  {
+    $sort: { "_id.year": -1 }
+  },
+  {
+    $limit: 5
+  }
+]
+
+
+
+
+
+
+
+
+
+[
+  {
+    $match: {
+      "payload": { $exists: true, $ne: null }
+    }
+  },
+  {
+    $addFields: {
+      "parsed_date": { $toDate: "$payload.created_at" },
+      "parsed_total": {
+        $function: {
+          body: "function(base64Str) { try { let decoded = atob(base64Str); return parseFloat(decoded) || 0; } catch (e) { return 0; } }",
+          args: ["$payload.total"],
+          lang: "js"
+        }
+      },
+      "parsed_items": {
+        $function: {
+          body: "function(itemsStr) { try { return typeof itemsStr === 'string' ? JSON.parse(itemsStr) : itemsStr; } catch (e) { return []; } }",
+          args: ["$payload.items"],
+          lang: "js"
+        }
+      }
+    }
+  },
+  {
+    $unwind: {
+      path: "$parsed_items",
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $group: {
+      _id: {
+        year: { $year: "$parsed_date" },
+        week: { $week: "$parsed_date" },
+        product_id: "$parsed_items.product_id"
+      },
+      total_quantity: { $sum: "$parsed_items.quantity" },
+      total_revenue_from_items: { 
+        $sum: { $multiply: ["$parsed_items.quantity", "$parsed_items.price"] } 
+      },
+      orders_count: { $sum: 1 }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      year: "$_id.year",
+      week: "$_id.week",
+      product_id: "$_id.product_id",
+      total_quantity: 1,
+      total_revenue_from_items: 1,
+      orders_count: 1
+    }
+  },
+  {
+    $sort: { 
+      "year": -1, 
+      "week": -1, 
+      "total_revenue_from_items": -1 
+    }
+  },
+
+  {
+    $limit: 10
+  }
+]
+
+
+
