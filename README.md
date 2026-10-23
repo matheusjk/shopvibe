@@ -68,3 +68,25 @@ Impacto negativo: Necessita grana e gente capacitada para dar manutenção nos t
 ![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23-18-58-49.png)
 
 ---
+
+Na primeira vez vai buildar a imagem do docker kafka connect strimzi, depois fica mais rápido pra levantar os contaneires e remover.
+
+Para levantar os clusters use o seguinte comando => **docker compose up -d**
+
+Para remover todos os containers use o seguinte comando => **docker compose down**
+
+Para executar o script.sh para popular o BD use o seguinte comando dentro da pasta shopbivibe => **docker exec -i pgvector bash < postgres/script.sh** 
+
+
+
+Para visualizar os IP's do container pgvector(postgres de PROD) use os seguintes comandos =>  **docker network inspect shopvibe_dados**
+Imagem abaixo p/ exemplificar:
+
+---
+
+![Descrição da Imagem](./prints_telas/Capturadetelade2026-10-23-19-44-06.png)
+
+---
+
+
+
